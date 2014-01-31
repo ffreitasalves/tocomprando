@@ -18,9 +18,14 @@ urlpatterns = patterns('',
     #Main URLs
     url(r'^$', 'core.views.index',name='home'),
     url(r'register/$', 'core.views.register',name='register'),
+    url(r'order/$', 'core.views.order',name='order'),
+    url(r'panel/$', 'core.views.panel',name='panel'),
+    url(r'remove/(?P<id>\d+)/$', 'core.views.remove_order',name='remove'),
+    url(r'contact/$', 'core.views.contact',name='contact'),
+
 
     #Registration URLs
-    url(r'^login/$', 'core.views.login',name='login'),
+    url(r'^accounts/login/$', 'core.views.login',name='login'),
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout',{'next_page':'/'},name='logout'),
 
 )
