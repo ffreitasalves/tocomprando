@@ -58,13 +58,20 @@
       </div>
     </div>
 
-    <div class="container">
-      {% block container %}
+    <div class="wrap">
+        <div class="container">
+          {% block container %}
 
-      {% endblock %}
+          {% endblock %}
 
-    </div><!-- /.container -->
+        </div><!-- /.container -->
 
+        <div id="footer">
+          <div class="container">
+            <p class="text-muted pull-right">Você é uma empresa? Então, <a href="#">Tá Vendendo!</a></p>
+          </div>
+        </div>
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="login_register" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
