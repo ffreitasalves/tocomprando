@@ -1,10 +1,35 @@
 {% extends "base.html" %}
 
 {% block container %}
+    <p>&nbsp;</p>
+    <div class="row">
+        <div class="col-xs-12">
+            <ul class="nav nav-pills nav-justified thumbnail">
+                <li class="active"><a href="#">
+                    <h4 class="list-group-item-heading">Passo 1</h4>
+                    <p class="list-group-item-text">Digite o que quer comprar</p>
+                </a></li>
+                <li class="disabled"><a href="#">
+                    <h4 class="list-group-item-heading">Passo 2</h4>
+                    <p class="list-group-item-text">Receba a cotação de várias lojas</p>
+                </a></li>
+                <li class="disabled"><a href="#">
+                    <h4 class="list-group-item-heading">Passo 3</h4>
+                    <p class="list-group-item-text">Escolha a melhor e mais barata</p>
+                </a></li>
+            </ul>
+        </div>
+	</div>
 
     <div class="starter-template">
-    <h1>Django 1.6 Bootstrap Powered</h1>
-    <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
-    </div>
+        <h1>Digite o que você quer comprar:</h1>
+        <br>
+        <div class="input-group">
+            <input type="text" class="form-control input-lg" placeholder="Descreva o tipo de produto que você quer" autofocus>
+            <span class="input-group-btn">
+                  <button type="submit" class="btn btn-lg btn-primary">Lá Vai!</button>
+            </span>
+        </div>
 
+    </div>
 {% endblock %}
