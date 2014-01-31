@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block container %}
+
+   <div class="row" id="painel">
+        <table class="table table-striped custab">
+        <thead>
+            <h1>Seus Pedidos</h1>
+            <tr>
+                <th>#</th>
+                <th>Pedido</th>
+                <th>Número de Cotações</th>
+                <th class="pull-right">Ação</th>
+            </tr>
+        </thead>
+            {% for p in pedidos %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td><a href="{% url 'order_detail' p.id %}">{{ p }}</a></td>
+                    <td>{{ p.nro_cotacoes }}</td>
+                    <td><a href="{% url 'remove' p.id %}" class="btn btn-danger btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span>Remover</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+{% endblock %}

@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login as authlogin, authenticate
 from django.contrib.auth.decorators import login_required
-from models import Pedido
+from models import Pedido, Empresa
 from django.core.mail import send_mail
 from django.utils.encoding import smart_unicode
 
@@ -115,6 +115,43 @@ def order_detail(request,id):
 
     return render_to_response(
         'detail.html',
+        locals(),
+        context_instance = RequestContext(request),
+    )
+
+@login_required
+def register_company(request):
+    if request.method == 'POST':
+
+        empresa = request.POST.get('empresa')
+        cnpj = request.POST.get('cnpj')
+        endereco = request.POST.get('endereco')
+        telefone = request.POST.get('telefone')
+        site = request.POST.get('site')
+
+        new_company = Empresa.objects.create(
+            empresa = empresa,
+            cnpj = cnpj,
+            endereco = endereco,
+            telefone = telefone,
+            site = site,
+            user = request.user,
+            ativo = False,
+        )
+
+        new_company.save()
+
+        return HttpResponseRedirect(reverse('planos'))
+
+    return render_to_response(
+        'registration/register_company.html',
+        locals(),
+        context_instance = RequestContext(request),
+    )
+
+def planos(request):
+    return render_to_response(
+        'planos.html',
         locals(),
         context_instance = RequestContext(request),
     )
