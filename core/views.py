@@ -83,6 +83,7 @@ def panel(request):
 
 def contact(request):
     if request.method == 'POST':
+        try:
             send_mail(
                 u"[ToComprando]Contato pelo site", #titulo
                 u"""
@@ -98,6 +99,9 @@ def contact(request):
                 'no-reply@doingcast.com', #quem envia
                 ('contact@doingcast.com',), #quem recebe
             )
+            msg = 'Mensagem enviada com sucesso'
+        except:
+            pass
 
     return render_to_response(
         'contact.html',
