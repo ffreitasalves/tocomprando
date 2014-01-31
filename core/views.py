@@ -108,3 +108,13 @@ def contact(request):
         locals(),
         context_instance = RequestContext(request),
     )
+
+@login_required
+def order_detail(request,id):
+    order = get_object_or_404(Pedido,id=id,user=request.user)
+
+    return render_to_response(
+        'detail.html',
+        locals(),
+        context_instance = RequestContext(request),
+    )

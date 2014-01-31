@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'panel/$', 'core.views.panel',name='panel'),
     url(r'remove/(?P<id>\d+)/$', 'core.views.remove_order',name='remove'),
     url(r'contact/$', 'core.views.contact',name='contact'),
+    url(r'detail/(?P<id>\d+)/$', 'core.views.order_detail',name='order_detail'),
 
 
     #Registration URLs

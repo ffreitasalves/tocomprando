@@ -9,11 +9,11 @@
                     <h4 class="list-group-item-heading">Passo 1</h4>
                     <p class="list-group-item-text">Digite o que quer comprar</p>
                 </a></li>
-                <li class="active"><a href="#">
+                <li><a href="#">
                     <h4 class="list-group-item-heading">Passo 2</h4>
                     <p class="list-group-item-text">Receba a cotação de várias lojas</p>
                 </a></li>
-                <li class="disabled"><a href="#">
+                <li class="active"><a href="#">
                     <h4 class="list-group-item-heading">Passo 3</h4>
                     <p class="list-group-item-text">Escolha a melhor e mais barata</p>
                 </a></li>
@@ -24,22 +24,22 @@
    <div class="row" id="painel">
         <table class="table table-striped custab">
         <thead>
-            <h1>Seus Pedidos</h1>
+            <h1>{{ order }}</h1>
             <tr>
                 <th>#</th>
-                <th>Pedido</th>
-                <th>Número de Cotações</th>
-                <th class="pull-right">Ação</th>
+                <th>Descrição</th>
+                <th>Preço</th>
+                <th>Empresa</th>
+                <th>Ação</th>
             </tr>
         </thead>
-            {% for p in pedidos %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td><a href="{% url 'order_detail' p.id %}">{{ p }}</a></td>
-                    <td>{{ p.nro_cotacoes }}</td>
-                    <td><a href="{% url 'remove' p.id %}" class="btn btn-danger btn-xs pull-right"><span class="glyphicon glyphicon-remove"></span>Remover</a></td>
-                </tr>
-            {% endfor %}
+            <tr>
+                <td>1</td>
+                <td><a href="#">produto bla bla bla bla</a></td>
+                <td>R$50,44</td>
+                <td>Teen Spirit</td>
+                <td><a href="#" class="btn btn-success btn-xs"><span class="glyphicon glyphicon-remove"></span>Aprovar</a></td>
+            </tr>
         </table>
     </div>
 
