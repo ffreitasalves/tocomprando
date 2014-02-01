@@ -123,6 +123,12 @@ def order_detail(request,id):
 
 @login_required
 def register_company(request):
+
+    if request.user.empresa_set.exists():
+        if request.user.empresa_set.get().ativo == False:
+            return HttpResponseRedirect(reverse('plans'))
+        else:
+            return HttpResponseRedirect(reverse('panel'))
     if request.method == 'POST':
 
         empresa = request.POST.get('nome_empresa')
@@ -251,7 +257,7 @@ def plano_mensal(request):
           "items": [{
             "name": "item",
             "sku": "item",
-            "price": "350.00",
+            "price": "15.00",
             "currency": "BRL",
             "quantity": 1 }]},
         "amount": {
@@ -303,6 +309,12 @@ def ok(request):
     pagamento.payer_id = payerid
     pagamento.state = payment.state
     pagamento.log = str(payment)
+
+    if pagamento.state == 'approved':
+        empresa = request.user.empresa_set.get()
+        empresa.ativo = True
+        empresa.save()
+
 
     return render_to_response(
         'ok.html',

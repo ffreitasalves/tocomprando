@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% block container %}
     {% if pagamento.state == 'approved' %}
-        Pagamento Aprovado, pode navegar no site
+        <h1>Pagamento Aprovado, pode navegar no site</h1>
     {% else %}
-        Seu pagamento não foi aprovado, =(
+        <h1>Seu pagamento não foi aprovado, =(</h1>
     {% endif %}
 {% endblock %}
