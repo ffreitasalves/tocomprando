@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     url(r'register-company/$', 'core.views.register_company',name='register_company'),
     url(r'planos/$', 'core.views.planos',name='plans'),
     url(r'plano-socio/$', 'core.views.plano_socio',name='plano-socio'),
+    url(r'plano-mensal/$', 'core.views.plano_mensal',name='plano-mensal'),
     url(r'ok/$', 'core.views.ok',name='ok'),
     url(r'cancel/$', 'core.views.cancel',name='cancel'),
 
