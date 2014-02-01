@@ -48,6 +48,9 @@
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {% if request.user.is_authenticated %}
+                {% if request.user.empresa_set.exists  %}
+                    <li class="active"><a href="#">Área de Empresa</a></li>
+                {% endif %}
                 <li><a href="{% url "logout" %}">Logout</a></li>
             {% else %}
                 <li><a data-toggle="modal" data-target="#login_register" href="#">Login</a></li>
