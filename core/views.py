@@ -227,6 +227,9 @@ def plano_socio(request):
 @login_required
 def plano_mensal(request):
 
+    if not request.user.empresa_set.exists():
+        return HttpResponseRedirect(reverse('register_company'))
+
     import paypalrestsdk
 
     paypalrestsdk.configure({
