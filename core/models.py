@@ -33,3 +33,13 @@ class Empresa(models.Model):
 
     def __unicode__(self):
         return unicode(self.empresa)
+
+class Pagamento(models.Model):
+    user = models.ForeignKey(User,unique=True)
+    id_paypal = models.CharField(max_length=200,blank=True,null=True)
+    token = models.CharField(max_length=200,blank=True,null=True)
+    payer_id = models.CharField(max_length=200,blank=True,null=True)
+    status = models.CharField(max_length=200,blank=True,null=True)
+    log = models.TextField(blank=True,null=True)
+    data_criacao = models.DateTimeField(auto_now_add=True)
+    ultima_modificacao = models.DateTimeField(auto_now=True)

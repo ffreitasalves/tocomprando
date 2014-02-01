@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.contrib.auth import login as authlogin, authenticate
 from django.contrib.auth.decorators import login_required
-from models import Pedido, Empresa
+from models import Pedido, Empresa, Pagamento
 from django.core.mail import send_mail
 from django.utils.encoding import smart_unicode
 import logging
@@ -192,16 +192,24 @@ def plano_socio(request):
         "description": u"ToComprando - Plano Sócio" }]})
 
     # Create Payment and return status
+    novo_pagamento = Pagamento(user = request.user)
     if payment.create():
       print("Payment[%s] created successfully"%(payment.id))
+      novo_pagamento.id_paypal = payment.id
       # Redirect the user to given approval url
       for link in payment.links:
         if link.method == "REDIRECT":
           redirect_url = link.href
+          token = redirect_url[redirect_url.find('token=')+6:]
+          novo_pagamento.token = token
+          novo_pagamento.log = str(payment)
+          novo_pagamento.save()
           return HttpResponseRedirect(redirect_url)
     else:
       print("Error while creating payment:")
       print(payment.error)
+      novo_pagamento.log = str(payment)
+      novo_pagamento.save()
 
     return render_to_response(
         'planos.html',
@@ -210,6 +218,23 @@ def plano_socio(request):
     )
 
 def ok(request):
+    token = request.GET.get('token')
+    payerid = request.GET.get('PayerID')
+
+    import paypalrestsdk
+
+    paypalrestsdk.configure({
+      "mode": "sandbox", # sandbox or live
+      "client_id": "AeHUbBChEO4KrVQAmsqDBcJ3eiEd-Hn-G5GpSwn3ilbNdFQnqC0_wMZfe9pP",
+      "client_secret": "ELmLURA14iGL6IUh5y8XJLvVN8O_keUgCeFZwBBLR92rY98GQeMUJDqFTawe" })
+
+    pagamento = get_object_or_404(Pagamento,token=token,user=request.user)
+    payment = paypalrestsdk.Payment.find(pagamento.id_paypal)
+    payment.execute({"payer_id": payerid})
+
+    pagamento.payer_id = payerid
+    pagamento.state = payment.state
+    pagamento.log = str(payment)
 
     return render_to_response(
         'ok.html',
@@ -218,6 +243,9 @@ def ok(request):
     )
 
 def cancel(request):
+    token = request.GET.get('token')
+    pagamento = get_object_or_404(Pagamento,token=token,user=request.user)
+    pagamento.state = u'canceled'
 
     return render_to_response(
         'cancel.html',

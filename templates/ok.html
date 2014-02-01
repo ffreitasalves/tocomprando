@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
-    O cliente aprovou
-</body>
-</html>
+{% extends "base.html" %}
+{% block container %}
+    {% if pagamento.state == 'approved' %}
+        Pagamento Aprovado, pode navegar no site
+    {% else %}
+        Seu pagamento não foi aprovado, =(
+    {% endif %}
+{% endblock %}
