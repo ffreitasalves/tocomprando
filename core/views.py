@@ -151,7 +151,11 @@ def register_company(request):
         context_instance = RequestContext(request),
     )
 
+@login_required
 def planos(request):
+
+    if not request.user.empresa_set.exists():
+        return HttpResponseRedirect(reverse('register_company'))
 
     return render_to_response(
         'planos.html',
