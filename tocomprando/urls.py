@@ -25,6 +25,9 @@ urlpatterns = patterns('',
     url(r'detail/(?P<id>\d+)/$', 'core.views.order_detail',name='order_detail'),
     url(r'register-company/$', 'core.views.register_company',name='register_company'),
     url(r'planos/$', 'core.views.planos',name='plans'),
+    url(r'plano-socio/$', 'core.views.plano_socio',name='plano-socio'),
+    url(r'ok/$', 'core.views.ok',name='ok'),
+    url(r'cancel/$', 'core.views.cancel',name='cancel'),
 
 
     #Registration URLs

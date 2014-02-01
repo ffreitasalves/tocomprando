@@ -1,3 +1,4 @@
+#coding: utf-8
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template import RequestContext
 from django.contrib.auth.models import User
@@ -8,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from models import Pedido, Empresa
 from django.core.mail import send_mail
 from django.utils.encoding import smart_unicode
+import logging
 
 def index(request):
     return render_to_response(
@@ -150,8 +152,75 @@ def register_company(request):
     )
 
 def planos(request):
+
     return render_to_response(
         'planos.html',
+        locals(),
+        context_instance = RequestContext(request),
+    )
+
+@login_required
+def plano_socio(request):
+
+    import paypalrestsdk
+
+    paypalrestsdk.configure({
+      "mode": "sandbox", # sandbox or live
+      "client_id": "AeHUbBChEO4KrVQAmsqDBcJ3eiEd-Hn-G5GpSwn3ilbNdFQnqC0_wMZfe9pP",
+      "client_secret": "ELmLURA14iGL6IUh5y8XJLvVN8O_keUgCeFZwBBLR92rY98GQeMUJDqFTawe" })
+
+    logging.basicConfig(level=logging.INFO)
+
+    payment = paypalrestsdk.Payment({
+      "intent": "sale",
+      "payer": {
+        "payment_method": "paypal",},
+      "redirect_urls": {
+        "return_url": "http://localhost:8000/ok",
+        "cancel_url": "http://localhost:8000/cancel" },
+      "transactions": [{
+        "item_list": {
+          "items": [{
+            "name": "item",
+            "sku": "item",
+            "price": "350.00",
+            "currency": "BRL",
+            "quantity": 1 }]},
+        "amount": {
+          "total": "350.00",
+          "currency": "BRL" },
+        "description": u"ToComprando - Plano Sócio" }]})
+
+    # Create Payment and return status
+    if payment.create():
+      print("Payment[%s] created successfully"%(payment.id))
+      # Redirect the user to given approval url
+      for link in payment.links:
+        if link.method == "REDIRECT":
+          redirect_url = link.href
+          return HttpResponseRedirect(redirect_url)
+    else:
+      print("Error while creating payment:")
+      print(payment.error)
+
+    return render_to_response(
+        'planos.html',
+        locals(),
+        context_instance = RequestContext(request),
+    )
+
+def ok(request):
+
+    return render_to_response(
+        'ok.html',
+        locals(),
+        context_instance = RequestContext(request),
+    )
+
+def cancel(request):
+
+    return render_to_response(
+        'cancel.html',
         locals(),
         context_instance = RequestContext(request),
     )
