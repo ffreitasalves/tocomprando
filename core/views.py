@@ -217,6 +217,64 @@ def plano_socio(request):
         context_instance = RequestContext(request),
     )
 
+@login_required
+def plano_mensal(request):
+
+    import paypalrestsdk
+
+    paypalrestsdk.configure({
+      "mode": "sandbox", # sandbox or live
+      "client_id": "AeHUbBChEO4KrVQAmsqDBcJ3eiEd-Hn-G5GpSwn3ilbNdFQnqC0_wMZfe9pP",
+      "client_secret": "ELmLURA14iGL6IUh5y8XJLvVN8O_keUgCeFZwBBLR92rY98GQeMUJDqFTawe" })
+
+    logging.basicConfig(level=logging.INFO)
+
+    payment = paypalrestsdk.Payment({
+      "intent": "sale",
+      "payer": {
+        "payment_method": "paypal",},
+      "redirect_urls": {
+        "return_url": "http://localhost:8000/ok",
+        "cancel_url": "http://localhost:8000/cancel" },
+      "transactions": [{
+        "item_list": {
+          "items": [{
+            "name": "item",
+            "sku": "item",
+            "price": "350.00",
+            "currency": "BRL",
+            "quantity": 1 }]},
+        "amount": {
+          "total": "15.00",
+          "currency": "BRL" },
+        "description": u"ToComprando - Plano Mensal" }]})
+
+    # Create Payment and return status
+    novo_pagamento = Pagamento(user = request.user)
+    if payment.create():
+      print("Payment[%s] created successfully"%(payment.id))
+      novo_pagamento.id_paypal = payment.id
+      # Redirect the user to given approval url
+      for link in payment.links:
+        if link.method == "REDIRECT":
+          redirect_url = link.href
+          token = redirect_url[redirect_url.find('token=')+6:]
+          novo_pagamento.token = token
+          novo_pagamento.log = str(payment)
+          novo_pagamento.save()
+          return HttpResponseRedirect(redirect_url)
+    else:
+      print("Error while creating payment:")
+      print(payment.error)
+      novo_pagamento.log = str(payment)
+      novo_pagamento.save()
+
+    return render_to_response(
+        'planos.html',
+        locals(),
+        context_instance = RequestContext(request),
+    )
+
 def ok(request):
     token = request.GET.get('token')
     payerid = request.GET.get('PayerID')
