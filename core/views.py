@@ -125,7 +125,7 @@ def order_detail(request,id):
 def register_company(request):
     if request.method == 'POST':
 
-        empresa = request.POST.get('empresa')
+        empresa = request.POST.get('nome_empresa')
         cnpj = request.POST.get('cnpj')
         endereco = request.POST.get('endereco')
         telefone = request.POST.get('telefone')
@@ -143,7 +143,7 @@ def register_company(request):
 
         new_company.save()
 
-        return HttpResponseRedirect(reverse('planos'))
+        return HttpResponseRedirect(reverse('plans'))
 
     return render_to_response(
         'registration/register_company.html',
